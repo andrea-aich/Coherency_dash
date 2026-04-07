@@ -9,7 +9,8 @@ from scipy.signal.windows import hann
 
 
 # Initialize the app
-app = dash.Dash(__name__)
+app = dash.Dash(__name__,
+                external_scripts=['https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'])
 app.config.suppress_callback_exceptions = True
 
 
@@ -80,71 +81,121 @@ app.layout = html.Div(className='big-app-container',
                 )
             ]
         ),
-        html.Div(className='build-sources',
+        html.Div(className='graphs-container build-sources',
             children=[ 
-                html.Div(className='row',
+                html.Div(className='row top-section-container',
                     children=[
-                        html.Div(className='nine columns div-signals',
+                        html.Div(className='nine columns',
                             children=[
                                 html.H2('Combine your sources to build your signal.'),
-                                html.P('Signal A is fixed. It is the sum of sources A, B, and C.'), 
-                                html.P('Use the sliders to choose the weight of each source to compute singal B.'),
-                                html.P('You can also add noise and a phase shift between source B and source C.'),
-                                html.Div(className='row signal A', 
+                                html.Div(style={'padding': '10px', 'margin': '10px'}, children=[
+                                    dcc.Markdown('''
+                                        Signal $x(t)$ is fixed and computed with the following formula: 
+                                        $$
+                                        x(t) = s_A(t) + s_B(t) + s_C(t)
+                                        $$
+
+                                        Signal y(t) is computed as a weighted sum of the sources with an added noise component:
+                                        $$
+                                        y(t) = w_1 s_A(t) + w_2 s_B(t) + w_3 s_C(t) + \\epsilon
+                                        $$
+                                        
+                                    ''', mathjax=True)
+                                ]),
+                                html.P('Use the sliders to choose the weights, phase shift and noise level.'),
+                                html.Div(className='row signal A', children=[
+                                    html.Div(className='row div-signals-sliders',
                                         children=[
-                                            html.Div(className='row div-signals-sliders',
-                                                children=[
-                                                    html.Div(className='two columns div-source-A', children=[ 
-                                                        html.P('Weight of source A'),
-                                                        dcc.Slider(id='source-A-slider', min=0, max=10, step=0.25, value=1,
-                                                            marks={i: '{}'.format(i) for i in range(0, 11)})]),
-                                                    html.Div(className='two columns div-source-B', children=[
-                                                        html.P('Weight of source B'),
-                                                        dcc.Slider(id='source-B-slider', min=0, max=10, step=0.25, value=1,
-                                                            marks={i: '{}'.format(i) for i in range(0, 11)})]),  
-                                                    html.Div(className='two columns div-source-C', children=[
-                                                        html.P('Weight of source C'),
-                                                        dcc.Slider(id='source-C-slider', min=0, max=10, step=0.25, value=1,
-                                                            marks={i: '{}'.format(i) for i in range(0, 11)})]),
-                                                    html.Div(className='two columns div-noise', children=[
-                                                        html.P('Noise level'),
-                                                        dcc.Slider(id='noise-slider', min=0, max=10, step=2, value=1,
-                                                            marks={i: '{}'.format(i) for i in range(0, 11, 5)})]), 
-                                                    html.Div(className='two columns div-phase', children=[
-                                                        html.P('Phase shift between source B and its copy in signal B (in radians)'),
-                                                        dcc.Slider(id='phase-slider', min=0, max=2*np.pi, step=0.25, value=1,
-                                                            marks={i: '{}'.format(i) for i in range(0, 6)})
-                                                        ])
-                                                ]
-                                            ),
-                                            html.Div(className='div-signals-plot',
-                                            children=[
-                                                dcc.Graph(id='signals-plot',
-                                                    config={'displayModeBar': False},
-                                                    animate=True)
-                                            ]
-                                        )    
+                                            html.Div(className='two columns div-source-A', children=[ 
+                                                html.P('Weight of source A'),
+                                                dcc.Slider(id='source-A-slider', min=0, max=4, step=0.25, value=1,
+                                                    marks={i: '{}'.format(i) for i in range(0, 5)})]),
+                                            html.Div(className='two columns div-source-B', children=[
+                                                html.P('Weight of source B'),
+                                                dcc.Slider(id='source-B-slider', min=0, max=4, step=0.25, value=1,
+                                                    marks={i: '{}'.format(i) for i in range(0, 5)})]),  
+                                            html.Div(className='two columns div-source-C', children=[
+                                                html.P('Weight of source C'),
+                                                dcc.Slider(id='source-C-slider', min=0, max=4, step=0.25, value=1,
+                                                    marks={i: '{}'.format(i) for i in range(0, 5)})]),
+                                            html.Div(className='two columns div-noise', children=[
+                                                html.P('Noise level'),
+                                                dcc.Slider(id='noise-slider', min=0, max=4, step=1, value=1,
+                                                    marks={i: '{}'.format(i) for i in range(0, 5)})]), 
+                                            html.Div(className='two columns div-phase', children=[
+                                                html.P('Phase shift of source B'),
+                                                dcc.Slider(id='phase-slider', min=0, max=2*np.pi, step=0.25, value=1,
+                                                    marks={i: '{}'.format(i) for i in range(0, 6)})
+                                                ])
                                         ]
-                                )
+                                    ),
+                                    html.Div(className='div-signals-plot',
+                                    children=[
+                                        dcc.Graph(id='signals-plot',
+                                            config={'displayModeBar': False},
+                                            animate=True)
+                                    ]
+                                    )    
+                                ])
                             ]
                         ),
                         html.Div(className='three columns div-coherency',
                             children=[
                                 html.H2('Compute coherency'),
-                                html.P('Choose the frequency with the slider.'),
+                                html.Div(style={'padding': '10px', 'margin': '10px'}, children=[
+                                    dcc.Markdown('''
+                                        Coherency $C_{xy}(f)$ is computed with the following formula: 
+                                        $$
+                                        C_{xy}(f) = \\frac{S_{xy}(f)}{\\sqrt{S_{xx}(f) S_{yy}(f)}}
+                                        $$
+
+                                        Where $S_{xy}(f)$ is the cross-spectral density between signals $x(t)$ and $y(t)$, and $S_{xx}(f)$ and $S_{yy}(f)$ are the auto-spectral densities of $x(t)$ and $y(t)$ respectively.
+                                    ''', mathjax=True)
+                                ]),
+                                html.P('Use the sliders to choose the frequency.'),
                                 dcc.Slider(id='coherency-freq-slider', min=1, max=100, step=1, value=50,
-                                    marks={i: '{}'.format(i) for i in range(1, 101, 20)}),   
+                                    marks={i: '{}'.format(i) for i in range(0, 101, 10)}),   
                                 dcc.Graph(id='coherency-plot',
-                                    config={'displayModeBar': False}, 
+                                    config={'displayModeBar': False},
                                     animate=False)
                             ]
                         )
                     ]
                 )
             ]
-        )
+        ),
+        
+                 
+        html.Script('''
+            console.log("MathJax v3 Initialization Script");
+            
+            function processMathJax() {
+                console.log("Processing MathJax");
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    console.log("Calling typesetPromise");
+                    MathJax.typesetPromise().catch(err => console.log("MathJax error:", err));
+                }
+            }
+            
+            // Wait for MathJax to be ready
+            window.MathJax = {
+                startup: {
+                    pageReady: () => {
+                        console.log("MathJax page ready");
+                        processMathJax();
+                    }
+                }
+            };
+            
+            // Also try after page load
+            window.addEventListener('load', function() {
+                console.log("Window load event fired");
+                setTimeout(processMathJax, 1000);
+            });
+        ''')
     ]
 )
+
 
 @app.callback(Output('output', 'children'), Input('input', 'value'))
 def display_output(value):
@@ -370,8 +421,8 @@ def update_signals_plot(slider_source_A, slider_source_B, slider_source_C, slide
 
     print('tt[0:10]: ', tt[0:10])
     print('Xt[0,:][0:10]]: ', Xt[0,:][0:10])
-    trace_a = go.Scatter(x=tt, y=Xt[0,:] , mode='lines', name='Signal A')
-    trace_b = go.Scatter(x=tt, y=Yt[0,:] , mode='lines', name='Signal B')
+    trace_a = go.Scatter(x=tt, y=Xt[0,:] , mode='lines', name='Signal X')
+    trace_b = go.Scatter(x=tt, y=Yt[0,:] , mode='lines', name='Signal Y')
 
     figure = {'data': [trace_a, trace_b],
               'layout': go.Layout(
