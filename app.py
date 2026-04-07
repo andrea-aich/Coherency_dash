@@ -24,141 +24,142 @@ def get_options(list_stocks):
     return dict_list
 
 
-app.layout = html.Div(
+app.layout = html.Div(className='big-app-container',
     children=[
-        html.Div(className='row',
+        html.Div(className='banner', children=[
+            html.Div(className='banner-text',children=[
+                html.H1('DASH - COHERENCY'),
+                html.P('Visualising time series with Plotly - Dash.')],
+        ),
+        ]),
+        html.Div(className='app-container',
+            children=[
+                html.Div(className='status-container',
                     children=[
-                        html.Div(className='column left div-Create-your-sources',
-                                    children=[
-                                        html.H2('Create your sources.'),
-                                        html.P('They are like the ingredients of your cake that you will later mix together.'),
-                                        html.P('Use the sliders to change the frequency of the sources.'),
-                        html.Div(className='row source A', children=[
-                            html.Div(className='column left div-slider-A',
-                                 children=[
-                                    html.P('Frequency A'),
-                                    dcc.Slider(id='freq-slider-A', min=0, max=2*np.pi, step=0.25, value=np.pi / 2,
-                                           marks={i: '{}'.format(i) for i in range(0, 6)}),
-                                ]),
-                            html.Div(className='column right div-sources-plot-A',
-                                 children=[
-                                     dcc.Graph(id='source-A',
-                                     config={'displayModeBar': False},
-                                     animate=True)
-                                    ])    
-                        ]),
-                        html.Div(className='row source B', children=[
-                            html.Div(className='column left div-slider-B',
-                                 children=[
-                                    html.P('Frequency B'),
-                                    dcc.Slider(id='freq-slider-B', min=0, max=2*np.pi, step=0.25, value=np.pi / 2,
-                                           marks={i: '{}'.format(i) for i in range(0, 6)}),
-                                ]),
-                            html.Div(className='column right div-sources-plot-B',
-                                 children=[
-                                     dcc.Graph(id='source-B',
-                                     config={'displayModeBar': False},
-                                     animate=True)
-                                    ])    
-                        ]),
-                        html.Div(className='row source C', children=[
-                            html.Div(className='column left div-slider-C',
-                                 children=[
-                                    html.P('Frequency C'),
-                                    dcc.Slider(id='freq-slider-C', min=0, max=2*np.pi, step=0.25, value=np.pi / 2,
-                                           marks={i: '{}'.format(i) for i in range(0, 6)}),
-                                ]),
-                            html.Div(className='column right',
-                                 children=[
-                                     dcc.Graph(id='source-C',
-                                     config={'displayModeBar': False},
-                                     animate=True)
-                                    ])    
-                        ]),
-                    ]
-                ),
-        html.Div(className='column right',
-                    children=[
-                        html.H2('Combine your sources to build your signals.'),
-                        html.P('Use the sliders to choose the frequency and time window.'),
-                        html.Div(className='row signal A', children=[
-                            html.Div(className='column right div-single-sliders',
-                                 children=[
-                                    html.P('Weight of source A'),
-                                    dcc.Slider(id='source-A-slider', min=0, max=10, step=0.25, value=1,
-                                           marks={i: '{}'.format(i) for i in range(0, 11)}),
-                                    html.P('Weight of source B'),
-                                    dcc.Slider(id='source-B-slider', min=0, max=10, step=0.25, value=1,
-                                           marks={i: '{}'.format(i) for i in range(0, 11)}),  
-                                    html.P('Weight of source C'),
-                                    dcc.Slider(id='source-C-slider', min=0, max=10, step=0.25, value=1,
-                                           marks={i: '{}'.format(i) for i in range(0, 11)}),            
-                                    html.P('Noise level'),
-                                    dcc.Slider(id='noise-slider', min=0, max=100, step=10, value=1,
-                                           marks={i: '{}'.format(i) for i in range(0, 11)}), 
-                                    html.P('Phase shift between source B and source C'),
-                                    dcc.Slider(id='phase-slider', min=0, max=2*np.pi, step=0.25, value=1,
-                                           marks={i: '{}'.format(i) for i in range(0, 6)}),         
-                                ]),
-                            html.Div(className='column right div-signals-plot',
-                                 children=[
-                                     dcc.Graph(id='signals-plot',
-                                     config={'displayModeBar': False},
-                                     animate=True)
-                                    ])    
-                        ])
+                        html.Div(className='row div-Create-your-sources',
+                            children=[
+                                html.Div(className='explanation text',
+                                        children=[
+                                            html.H2('Create your sources.'),
+                                            html.P('They are like the ingredients of your cake that you will later mix together.'),
+                                            html.P('Use the sliders to change the frequency of the sources.'),
+                                         ]
+                                ),
+                                html.Div(className='row three-sources',
+                                        children=[
+                                            html.Div(className='four columns source A', children=[
+                                                html.Div(className='div-slider-A',
+                                                    children=[
+                                                        html.P('Frequency A (Hz)'),
+                                                        dcc.Slider(id='freq-slider-A', min=0, max=100, step=1, value=10,
+                                                            marks={i: '{}'.format(i) for i in range(0, 101, 10)}),
+                                                        dcc.Graph(id='source-A',
+                                                            config={'displayModeBar': False},
+                                                            animate=True)
+                                                    ]
+                                                )    
+                                            ]),
+                                            html.Div(className='four columns source B', children=[
+                                                html.Div(className='div-slider-B',
+                                                    children=[
+                                                        html.P('Frequency B (Hz)'),
+                                                        dcc.Slider(id='freq-slider-B', min=0, max=100, step=1, value=40,
+                                                            marks={i: '{}'.format(i) for i in range(0, 101, 10)}),
+                                                        dcc.Graph(id='source-B',
+                                                            config={'displayModeBar': False},
+                                                            animate=True)
+                                                    ]
+                                                )    
+                                            ]),
+                                            html.Div(className='four columns source C', children=[
+                                                html.Div(className='div-slider-C',
+                                                    children=[
+                                                        html.P('Frequency C (Hz)'),
+                                                        dcc.Slider(id='freq-slider-C', min=0, max=100, step=1, value=4,
+                                                            marks={i: '{}'.format(i) for i in range(0, 101, 10)}),
+                                                        dcc.Graph(id='source-C',
+                                                            config={'displayModeBar': False},
+                                                            animate=True)
+                                                    ]
+                                                )    
+                                            ]),
+                                        ]
+                                )
+                            ]
+                        )
                     ]
                 )
-                    ]
-        ),       
-        html.Div(className='row',
+            ]
+        ),
+        html.Div(className='build-sources',
+            children=[ 
+                html.Div(className='row',
                     children=[
-                        html.Div(className='eight columns div-coherency',
-                                    children=[
-                                        html.H2('Compute coherency'),
-                                        html.P('Use the sliders to choose the frequency.'),
-                                        dcc.Slider(id='coherency-freq-slider', min=0, max=2*np.pi, step=0.25, value=np.pi,
-                                           marks={i: '{}'.format(i) for i in range(0, 6)}),   
-                                        dcc.Graph(id='coherency-plot',
-                                     config={'displayModeBar': False},
-                                     animate=False)
-                                    ]
+                        html.Div(className='nine columns div-signals',
+                            children=[
+                                html.H2('Combine your sources to build your signal.'),
+                                html.P('Signal A is fixed. It is the sum of sources A, B, and C.'), 
+                                html.P('Use the sliders to choose the weight of each source to compute singal B.'),
+                                html.P('You can also add noise and a phase shift between source B and source C.'),
+                                html.Div(className='row signal A', 
+                                        children=[
+                                            html.Div(className='row div-signals-sliders',
+                                                children=[
+                                                    html.Div(className='two columns div-source-A', children=[ 
+                                                        html.P('Weight of source A'),
+                                                        dcc.Slider(id='source-A-slider', min=0, max=10, step=0.25, value=1,
+                                                            marks={i: '{}'.format(i) for i in range(0, 11)})]),
+                                                    html.Div(className='two columns div-source-B', children=[
+                                                        html.P('Weight of source B'),
+                                                        dcc.Slider(id='source-B-slider', min=0, max=10, step=0.25, value=1,
+                                                            marks={i: '{}'.format(i) for i in range(0, 11)})]),  
+                                                    html.Div(className='two columns div-source-C', children=[
+                                                        html.P('Weight of source C'),
+                                                        dcc.Slider(id='source-C-slider', min=0, max=10, step=0.25, value=1,
+                                                            marks={i: '{}'.format(i) for i in range(0, 11)})]),
+                                                    html.Div(className='two columns div-noise', children=[
+                                                        html.P('Noise level'),
+                                                        dcc.Slider(id='noise-slider', min=0, max=10, step=2, value=1,
+                                                            marks={i: '{}'.format(i) for i in range(0, 11, 5)})]), 
+                                                    html.Div(className='two columns div-phase', children=[
+                                                        html.P('Phase shift between source B and its copy in signal B (in radians)'),
+                                                        dcc.Slider(id='phase-slider', min=0, max=2*np.pi, step=0.25, value=1,
+                                                            marks={i: '{}'.format(i) for i in range(0, 6)})
+                                                        ])
+                                                ]
+                                            ),
+                                            html.Div(className='div-signals-plot',
+                                            children=[
+                                                dcc.Graph(id='signals-plot',
+                                                    config={'displayModeBar': False},
+                                                    animate=True)
+                                            ]
+                                        )    
+                                        ]
                                 )
+                            ]
+                        ),
+                        html.Div(className='three columns div-coherency',
+                            children=[
+                                html.H2('Compute coherency'),
+                                html.P('Choose the frequency with the slider.'),
+                                dcc.Slider(id='coherency-freq-slider', min=1, max=100, step=1, value=50,
+                                    marks={i: '{}'.format(i) for i in range(1, 101, 20)}),   
+                                dcc.Graph(id='coherency-plot',
+                                    config={'displayModeBar': False}, 
+                                    animate=False)
+                            ]
+                        )
                     ]
-                ),
-        html.Div(className='row',
-                 children=[
-                    html.Div(className='eight columns div-user-controls',
-                             children=[
-                                 html.H2('DASH - STOCK PRICES'),
-                                 html.P('Visualising time series with Plotly - Dash.'),
-                                 html.P('Pick one or more stocks from the dropdown below.'),
-                                 html.Div(
-                                     className='div-for-dropdown',
-                                     children=[
-                                         dcc.Dropdown(id='stockselector', options=get_options(df['stock'].unique()),
-                                                      multi=True, value=[df['stock'].sort_values()[0]],
-                                                      style={'backgroundColor': '#1E1E1E'},
-                                                      className='stockselector'
-                                                      ),
-                                     ],
-                                     style={'color': '#1E1E1E'})
-                                ]
-                             ),
-                    html.Div(className='four columns div-for-charts bg-grey',
-                             children=[
-                                 dcc.Graph(id='timeseries',
-                                     config={'displayModeBar': False},
-                                     animate=True),
-                                 dcc.Graph(id='change',
-                                     config={'displayModeBar': False},
-                                     animate=True),
-                                ]
-                             )                               
-                    ]
-                 )
+                )
+            ]
+        )
     ]
 )
+
+@app.callback(Output('output', 'children'), Input('input', 'value'))
+def display_output(value):
+    return 'You have entered {}'.format(value)
 
 
 # Callback for timeseries price
@@ -220,7 +221,7 @@ def update_change(selected_dropdown_value):
     figure = {'data': data,
               'layout': go.Layout(
                   colorway=["#5E0DAC", '#FF4F00', '#375CB1', '#FF7400', '#FFF400', '#FF0056'],
-                  template='plotly_dark',
+                  #template='plotly_dark',
                   paper_bgcolor='rgba(0, 0, 0, 0)',
                   plot_bgcolor='rgba(0, 0, 0, 0)',
                   margin={'t': 50},
@@ -242,20 +243,21 @@ def update_change(selected_dropdown_value):
 def update_sources_plot(freq_a):
     print('entered update_sources_plot for source A')
     ''' Draw traces of the feature 'change' based one the currently selected frequencies '''
-    x = np.linspace(0, 10, 500)
-    source_a = np.sin(freq_a * x)
+    x = np.linspace(0, 1000, 1000)
+    source_a = np.sin(freq_a*2*np.pi/Fs * x)
     trace_a = go.Scatter(x=x, y=source_a, mode='lines', name='Source A')
-    
+    print('x[0:10]:', x[0:10])
     figure = {'data': [trace_a],
               'layout': go.Layout(
-                  template='plotly_dark',
+                  #template='plotly_dark',
                   paper_bgcolor='rgba(0, 0, 0, 0)',
                   plot_bgcolor='rgba(0, 0, 0, 0)',
                   margin={'t': 50},
                   height=200,
                   hovermode='x',
                   autosize=True,
-                  title={'text': 'Sources', 'font': {'color': 'white'}, 'x': 0.5},
+                  xaxis_title="Time [ms]",
+                  title={'text': 'Source A', 'x': 0.5},
               ),
               }
 
@@ -266,20 +268,21 @@ def update_sources_plot(freq_a):
                 [Input('freq-slider-B', 'value')])   
 def update_sources_plot(freq_b):
     ''' Draw traces of the feature 'change' based one the currently selected frequencies '''
-    x = np.linspace(0, 10, 500)
-    source_b = np.sin(freq_b * x)
+    x = np.linspace(0, 1000, 1000)
+    source_b = np.sin(freq_b*2*np.pi/Fs * x)
     trace_b = go.Scatter(x=x, y=source_b, mode='lines', name='Source B')
     
     figure = {'data': [trace_b],
               'layout': go.Layout(
-                  template='plotly_dark',
+                  #template='plotly_dark',
                   paper_bgcolor='rgba(0, 0, 0, 0)',
                   plot_bgcolor='rgba(0, 0, 0, 0)',
                   margin={'t': 50},
                   height=200,
                   hovermode='x',
                   autosize=True,
-                  title={'text': 'Sources', 'font': {'color': 'white'}, 'x': 0.5},
+                  xaxis_title="Time [ms]",
+                  title={'text': 'Source B',  'x': 0.5},
               ),
               }
 
@@ -289,20 +292,21 @@ def update_sources_plot(freq_b):
                 [Input('freq-slider-C', 'value')])   
 def update_sources_plot(freq_c):
     ''' Draw traces of the feature 'change' based one the currently selected frequencies '''
-    x = np.linspace(0, 10, 500)
-    source_c = np.sin(freq_c * x)
+    x = np.linspace(0, 1000, 1000)
+    source_c = np.sin(freq_c*2*np.pi/Fs * x)
     trace_c = go.Scatter(x=x, y=source_c, mode='lines', name='Source C')
     
     figure = {'data': [trace_c],
               'layout': go.Layout(
-                  template='plotly_dark',
+                  #template='plotly_dark',
                   paper_bgcolor='rgba(0, 0, 0, 0)',
                   plot_bgcolor='rgba(0, 0, 0, 0)',
                   margin={'t': 50},
                   height=200,
                   hovermode='x',
                   autosize=True,
-                  title={'text': 'Sources', 'font': {'color': 'white'}, 'x': 0.5},
+                  xaxis_title="Time [ms]",
+                  title={'text': 'Source C',  'x': 0.5},
               ),
               }
 
@@ -317,7 +321,7 @@ freq_res = 1/(T/1000) # frequency resolution
 N = Fs*(T/1000) # number of samples in an epoch
 Fmax = (N/2)*freq_res # maximal frequency or nyquist frequency
 W = np.linspace(0,Fmax,T)*freq_res # here we store the frequency indices
-
+print('W: ', W)
 # For the statistics
 num_trials = 10 
 
@@ -365,21 +369,18 @@ def update_signals(phase_val, noise_val, s1_weight, s2_weight, s3_weight, s1t, s
     s2_1t = s2t
     s2_2t = np.ones((num_trials,total_time*Fs))*np.sin(2*np.pi*(t*freq2/Fs)+ phase_shift) # signal 2 with phase shift
     
-    alpha = np.ones((num_trials,total_time*Fs))*np.linspace(-1,1,total_time*Fs,endpoint=True)
-    alpha = np.sign(alpha) +1
-    beta = np.sign(-alpha) +1
-    Xt = s1t + s2_1t + s3t + noise_coef*np.random.randn(num_trials,total_time*Fs)
-    Yt = s1_weight*s1t + s2_weight*(alpha*s2_2t + beta*s2_1t) + s3_weight*s3t + noise_coef*np.random.randn(num_trials,total_time*Fs)
+    Xt = s1t + s2_1t + s3t
+    Yt = s1_weight*s1t + s2_weight*s2_2t + s3_weight*s3t + noise_coef*np.random.randn(num_trials,total_time*Fs)
     return t,Xt,Yt
 
-def coherency(time,f,Xt,Yt,Fs=1000,T=500):
+def coherency(time,f,Xt,Yt,Fs,T):
     print('entered coherency')
     C_xy_f_t = ()
     trials = np.shape(Xt)[0]
     H_window = np.ones((trials,T))*hann(T)
     # First we convert f to columns according to the resolution of our fft
     w = int(f/freq_res)
-    
+    print('w: ', w)
     print('time: ',time)
     print('Fs: ',Fs)
     print('T: ',T)
@@ -403,10 +404,11 @@ def coherency(time,f,Xt,Yt,Fs=1000,T=500):
 
         # We now construct the denominator of the coherency
         deno_f_t = np.sqrt(np.real(S_xx_f_t*S_yy_f_t))
-        
+        print('deno_f_t:' , deno_f_t)
+
         # We finally get the coherency
         C_xy_f_t = np.append(C_xy_f_t,S_xy_f_t/deno_f_t)
-        print(deno_f_t,C_xy_f_t)
+        print('S_xy_f_t: ', S_xy_f_t)
         
     return C_xy_f_t
 
@@ -460,7 +462,7 @@ def update_signals_plot(slider_source_A, slider_source_B, slider_source_C, slide
 
     figure = {'data': [trace_a, trace_b],
               'layout': go.Layout(
-                  template='plotly_dark',
+                  #template='plotly_dark',
                   paper_bgcolor='rgba(0, 0, 0, 0)',
                   plot_bgcolor='rgba(0, 0, 0, 0)',
                   margin={'t': 50},
@@ -470,7 +472,7 @@ def update_signals_plot(slider_source_A, slider_source_B, slider_source_C, slide
                   xaxis_title="Time [ms]",
                   yaxis_showticklabels=False,
                   yaxis_showgrid=False,
-                  title={'text': 'Sources', 'font': {'color': 'white'}, 'x': 0.5},
+                  title={'text': 'Signals',  'x': 0.5},
               ),
             }
 
@@ -500,9 +502,12 @@ def update_everything_plot(coherency_freq, slider_source_A, slider_source_B, sli
     )
     tt, Xt, Yt = update_signals(slider_phase,slider_noise, slider_source_A, slider_source_B, slider_source_C,s1t, s2t, s3t, slider_freq_B, num_trials)
 
-    cohe = coherency(total_time, coherency_freq, Xt, Yt)
+    print('coherency_freq: ', coherency_freq)
+    coherency_radians = coherency_freq*2*np.pi/Fs
+    print('coherency_radians: ', coherency_radians)
+    cohe = coherency(total_time, coherency_freq, Xt, Yt,Fs,T)
     Cxy_f = np.mean(cohe)
-    print('Cxy_f: ', Cxy_f)
+    
 
     # Phase angles
     angles = np.arctan2(np.imag(cohe), np.real(cohe))
@@ -522,19 +527,44 @@ def update_everything_plot(coherency_freq, slider_source_A, slider_source_B, sli
         name="Vector"
     )
 
-    figure = {'data': [trace_a, trace_b],
+
+    # For coherency values per trial
+    x_vals = []
+    y_vals = []
+
+    for r, i in zip(np.real(cohe), np.imag(cohe)):
+        x_vals += [0, r]
+        y_vals += [0, i]
+
+    trace_c = go.Scatter(
+        x=x_vals,
+        y=y_vals,
+        mode="lines+markers"
+    )
+
+    my_cirle = go.Scatter(
+        x=np.cos(np.linspace(0, 2*np.pi, 100)),
+        y=np.sin(np.linspace(0, 2*np.pi, 100)),
+        mode="lines",
+        name="Unit Circle"
+    )
+
+    figure = {'data': [trace_a, trace_b, trace_c, my_cirle],
               'layout': go.Layout(
-                  template='plotly_dark',
+                  #template='plotly_dark',
                   paper_bgcolor='rgba(0, 0, 0, 0)',
                   plot_bgcolor='rgba(0, 0, 0, 0)',
                   margin={'t': 50},
-                  height=200,
+                  height=250,
+                  width=310,
                   hovermode='x',
                   autosize=True,
-                  xaxis_title="Time [ms]",
+                  xaxis_showticklabels=False,
+                  xaxis_showgrid=False,
                   yaxis_showticklabels=False,
                   yaxis_showgrid=False,
-                  title={'text': 'Sources', 'font': {'color': 'white'}, 'x': 0.5},
+                  title={'text': 'Coherency',  'x': 0.5},
+                  legend=dict(y=-2,x=0)
               ),
             }
 

@@ -648,3 +648,37 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #4a9d84 !important;
 }
+
+/* Custom styles for Create your sources section */
+.div-Create-your-sources {
+  width: 87%;
+  margin: 0 auto;
+  background: #e1e0e183 !important;
+}
+
+.div-slider-A {
+  width: 87%;
+  margin: 0 auto;
+}
+.div-slider-B {
+  width: 87%;
+  margin: 0 auto;
+}
+.div-slider-C {
+  width: 87%;
+  margin: 0 auto;
+}
+
+.div-signals{
+  background: #f1f0ea83 !important;
+}
+
+.div-coherency{
+  background: #e4dce583 !important;
+}
+
+.build-sources{
+  width: 87%;
+  margin: 0 auto;
+  background: #f1f0ea83 !important;
+}
