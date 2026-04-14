@@ -205,12 +205,10 @@ def display_output(value):
 @app.callback(Output('source-A', 'figure'),
                 [Input('freq-slider-A', 'value')])   
 def update_sources_plot(freq_a):
-    print('entered update_sources_plot for source A')
     ''' Draw traces of the feature 'change' based one the currently selected frequencies '''
     x = np.linspace(0, 1000, 1000)
     source_a = np.sin(freq_a*2*np.pi/Fs * x)
     trace_a = go.Scatter(x=x, y=source_a, mode='lines', name='Source A')
-    print('x[0:10]:', x[0:10])
     figure = {'data': [trace_a],
               'layout': go.Layout(
                   #template='plotly_dark',
@@ -285,7 +283,6 @@ freq_res = 1/(T/1000) # frequency resolution
 N = Fs*(T/1000) # number of samples in an epoch
 Fmax = (N/2)*freq_res # maximal frequency or nyquist frequency
 W = np.linspace(0,Fmax,T)*freq_res # here we store the frequency indices
-print('W: ', W)
 # For the statistics
 num_trials = 10 
 
@@ -311,7 +308,6 @@ def sources(phase_val, noise_val, freq1_val, freq2_val, freq3_val, num_trials=1)
     return t,Xt,Yt,s1t,s2_1t,s2_2t,s3t,alpha,beta
 
 def update_sources(freq1_val, freq2_val, freq3_val, num_trials=1):
-    print('entered update_sources')
     t = np.linspace(0,total_time*Fs,total_time*Fs,endpoint=True) # time points in miliseconds, 10 seconds at 1000 Hz
     freq1 = freq1_val # Hz, first frequency
     freq2 = freq2_val # Hz, second frequency 
@@ -324,7 +320,6 @@ def update_sources(freq1_val, freq2_val, freq3_val, num_trials=1):
     return t,s1t,s2t,s3t
 
 def update_signals(phase_val, noise_val, s1_weight, s2_weight, s3_weight, s1t, s2t, s3t, freq2, num_trials=1):
-    print('entered update_signals')
     noise_coef = noise_val # noise coefficient
     t = np.linspace(0,total_time*Fs,total_time*Fs,endpoint=True) # time points in miliseconds, 10 seconds at 1000 Hz
     
@@ -338,16 +333,11 @@ def update_signals(phase_val, noise_val, s1_weight, s2_weight, s3_weight, s1t, s
     return t,Xt,Yt
 
 def coherency(time,f,Xt,Yt,Fs,T):
-    print('entered coherency')
     C_xy_f_t = ()
     trials = np.shape(Xt)[0]
     H_window = np.ones((trials,T))*hann(T)
     # First we convert f to columns according to the resolution of our fft
     w = int(f/freq_res)
-    print('w: ', w)
-    print('time: ',time)
-    print('Fs: ',Fs)
-    print('T: ',T)
     for segs in range(int(np.floor(time*Fs/T))):
         #Making a matrix of the segments of Xt and Yt during a specific time through all trials
         X = Xt[:,segs*T:(segs+1)*T]
@@ -368,11 +358,9 @@ def coherency(time,f,Xt,Yt,Fs,T):
 
         # We now construct the denominator of the coherency
         deno_f_t = np.sqrt(np.real(S_xx_f_t*S_yy_f_t))
-        print('deno_f_t:' , deno_f_t)
-
+        
         # We finally get the coherency
         C_xy_f_t = np.append(C_xy_f_t,S_xy_f_t/deno_f_t)
-        print('S_xy_f_t: ', S_xy_f_t)
         
     return C_xy_f_t
 
@@ -410,7 +398,6 @@ def regraph2(slider_phase, slider_noise, slider_freq1, slider_freq2, slider_freq
                  Input('freq-slider-C', 'value')])   
 def update_signals_plot(slider_source_A, slider_source_B, slider_source_C, slider_noise, slider_phase, slider_freq_A, slider_freq_B, slider_freq_C):
     ''' Draw traces of the feature 'change' based on the currently selected frequencies '''
-    print('slider_source_A: ', slider_source_A)
     tt, s1t, s2t, s3t = update_sources(
         slider_freq_A,
         slider_freq_B,
@@ -419,8 +406,6 @@ def update_signals_plot(slider_source_A, slider_source_B, slider_source_C, slide
     )
     tt, Xt, Yt = update_signals(slider_phase,slider_noise, slider_source_A, slider_source_B, slider_source_C,s1t, s2t, s3t, slider_freq_B, num_trials)
 
-    print('tt[0:10]: ', tt[0:10])
-    print('Xt[0,:][0:10]]: ', Xt[0,:][0:10])
     trace_a = go.Scatter(x=tt, y=Xt[0,:] , mode='lines', name='Signal X')
     trace_b = go.Scatter(x=tt, y=Yt[0,:] , mode='lines', name='Signal Y')
 
@@ -457,7 +442,6 @@ def update_signals_plot(slider_source_A, slider_source_B, slider_source_C, slide
                
 def update_everything_plot(coherency_freq, slider_source_A, slider_source_B, slider_source_C, slider_noise, slider_phase, slider_freq_A, slider_freq_B, slider_freq_C):
     ''' Draw traces of the feature 'change' based on the currently selected frequencies '''
-    print('slider_source_A: ', slider_source_A)
     tt, s1t, s2t, s3t = update_sources(
         slider_freq_A,
         slider_freq_B,
@@ -466,9 +450,6 @@ def update_everything_plot(coherency_freq, slider_source_A, slider_source_B, sli
     )
     tt, Xt, Yt = update_signals(slider_phase,slider_noise, slider_source_A, slider_source_B, slider_source_C,s1t, s2t, s3t, slider_freq_B, num_trials)
 
-    print('coherency_freq: ', coherency_freq)
-    coherency_radians = coherency_freq*2*np.pi/Fs
-    print('coherency_radians: ', coherency_radians)
     cohe = coherency(total_time, coherency_freq, Xt, Yt,Fs,T)
     Cxy_f = np.mean(cohe)
     
