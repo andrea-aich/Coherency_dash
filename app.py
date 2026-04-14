@@ -117,7 +117,7 @@ app.layout = html.Div(className='big-app-container',
                                             html.Div(className='two columns div-source-C', children=[
                                                 html.P('Weight of source C'),
                                                 dcc.Slider(id='source-C-slider', min=0, max=4, step=0.25, value=1,
-                                                    marks={i: '{}'.format(i) for i in range(0, 5)})]),
+                                                    marks={i: '{}'.format(i) for i in range(0, 4)})]),
                                             html.Div(className='two columns div-noise', children=[
                                                 html.P('Noise level'),
                                                 dcc.Slider(id='noise-slider', min=0, max=4, step=1, value=1,
